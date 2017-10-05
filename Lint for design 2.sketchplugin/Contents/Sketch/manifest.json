@@ -1,0 +1,78 @@
+{
+  "name": "Lint for design",
+  "description": "Validate your style sheet",
+  "author": "Saransh Solanki",
+  "homepage": "www.saranshsolanki.in",
+  "identifier" : "com.example.sketch.3641e459-8bc2-478e-b44e-cd1a6376e677",
+  "version" : "1.0",
+  "description" : "",
+  "authorEmail" : "saransh.solanki@gmail.com",
+
+ "commands" : [
+    {
+      "script" : "script.js",
+      "handler" : "checkFontSize",
+      "name" : "Font size",
+      "identifier" : "textfontsize"
+    },
+    {
+      "script" : "script.js",
+      "handler" : "checkTextColor",
+      "name" : "Color",
+      "identifier" : "textcolor"
+    },
+    {
+      "script" : "script.js",
+      "handler" : "checkTextHeight",
+      "name" : "Line height",
+      "identifier" : "textheight"
+    },
+    {
+      "script" : "script.js",
+      "handler" : "checkColor",
+      "name" : "Color",
+      "identifier" : "color"
+    },
+    {
+      "script" : "script.js",
+      "handler" : "checkFontFace",
+      "name" : "Font face",
+      "identifier" : "fontface"
+    },
+    {
+      "script" : "script.js",
+      "handler" : "checkSpelling",
+      "name" : "Spelling",
+      "identifier" : "spelling"
+    },
+    {
+      "script" : "script.js",
+      "handler" : "checkContrast",
+      "name" : "Contrast",
+      "identifier" : "contrast"
+    }
+
+  ],
+  "menu" : {
+    "items" : [
+      {
+          "title": "Typography",
+          "items": [
+              "textfontsize",
+              "textcolor",
+              "textheight",
+              "fontface"
+          ]
+      },
+      "color",
+      "spelling",
+      "contrast"
+    ],
+    "title" : "Lint"
+  },
+  "version": "1.0",
+  "description": "Lint for your design guidelines.",
+  "authorEmail": "saransh.solanki@gmail.com",
+}
+
+
