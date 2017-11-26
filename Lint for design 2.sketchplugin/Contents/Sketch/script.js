@@ -18,6 +18,7 @@ function checkFontSize(context) {
   var contextnew = context.selection.objectAtIndex(0);
   var artboardType = checkArtboard(context);
   
+  // ################################ enter the allowed font sizes for android, mweb, iOS and web
   if (artboardType == "android"){
     var fontAllowed = [12,14,16,24];
   }
@@ -45,6 +46,7 @@ function checkTextColor(context) {
   var contextnew = context.selection.objectAtIndex(0);
   var artboardType = checkArtboard(context);
   
+  // ################################ enter the allowed font colors
   if ((artboardType == "android")||(artboardType == "iOS")){
     var colorAllowed = ["#000000","#2D2D32","#787887", "#FFFFFF","#14BEF0","#FF2D00","#00A500"];
   }
@@ -60,6 +62,8 @@ function checkTextHeight(context) {
   var contextnew = context.selection.objectAtIndex(0);
   var artboardType = checkArtboard(context);
 
+  // ################################ enter the allowed line heights  
+
   var lineHeightAllowed = [0,1, 1.33, 1.5, 1.75];
   textHeight(contextnew, lineHeightAllowed);
 };
@@ -68,6 +72,8 @@ function checkTextHeight(context) {
 function checkColor(context) {
   var contextnew = context.selection.objectAtIndex(0);
   var artboardType = checkArtboard(context);
+
+  // ################################ enter the allowed layer background colors
   var colorAllowed = ["#000000","#2D2D32","#787887", "#FFFFFF","#14BEF0","#FF2D00","#00A500" ,"#28328C", "#FFFFFF", "#F0F0F5", "#B4B4BE", "#FFD700", "#FF2166", "FFC74D"];
   color(contextnew, colorAllowed);
 };
@@ -342,6 +348,7 @@ function fontSize(artboard, fontSizeSet) {
       // all text properties are here : http://developer.sketchapp.com/reference/api/file/api/Text.js.html#lineNumber48
       // check font valid or not
       for (var l = 0; l < fontSizeSet.length; l++) {
+
         if (layers.objectAtIndex(k).fontSize() === fontSizeSet[l]) {
           validFont = true;
           break;
