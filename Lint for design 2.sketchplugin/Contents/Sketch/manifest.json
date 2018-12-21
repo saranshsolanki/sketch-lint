@@ -4,40 +4,22 @@
   "author": "Saransh Solanki",
   "homepage": "www.saranshsolanki.in",
   "identifier" : "com.example.sketch.3641e459-8bc2-478e-b44e-cd1a6376e677",
-  "version" : "1.0",
-  "description" : "",
+  "version" : "2.0",
+  "description" : "check the compliance of your designs using guidelines",
   "authorEmail" : "saransh.solanki@gmail.com",
 
  "commands" : [
     {
       "script" : "script.js",
-      "handler" : "checkFontSize",
-      "name" : "Font size",
-      "identifier" : "textfontsize"
-    },
-    {
-      "script" : "script.js",
-      "handler" : "checkTextColor",
-      "name" : "Color",
-      "identifier" : "textcolor"
-    },
-    {
-      "script" : "script.js",
-      "handler" : "checkTextHeight",
-      "name" : "Line height",
-      "identifier" : "textheight"
+      "handler" : "checkFont",
+      "name" : "Font",
+      "identifier" : "font"
     },
     {
       "script" : "script.js",
       "handler" : "checkColor",
       "name" : "Color",
       "identifier" : "color"
-    },
-    {
-      "script" : "script.js",
-      "handler" : "checkFontFace",
-      "name" : "Font face",
-      "identifier" : "fontface"
     },
     {
       "script" : "script.js",
@@ -50,25 +32,39 @@
       "handler" : "checkContrast",
       "name" : "Contrast",
       "identifier" : "contrast"
+    },
+    {
+      "script" : "script.js",
+      "handler" : "checkPadding",
+      "name" : "Padding [Beta]",
+      "identifier" : "padding"
+    },
+    {
+      "script" : "script.js",
+      "handler" : "updateDefinitions",
+      "name" : "Update Rules",
+      "identifier" : "update"
+    },
+    {
+      "script" : "export.cocoascript",
+      "handler" : "exportFonts",
+      "name" : "Export Text Styles",
+      "identifier" : "exportFonts"
     }
-
   ],
   "menu" : {
-    "items" : [
-      {
-          "title": "Typography",
-          "items": [
-              "textfontsize",
-              "textcolor",
-              "textheight",
-              "fontface"
-          ]
-      },
+    "items" : [        
+      "font",
       "color",
       "spelling",
-      "contrast"
+      "contrast",
+      "padding",
+      "-",
+      "exportFonts",
+      "-",
+      "update"
     ],
-    "title" : "Lint"
+    "title" : "Police"
   },
   "version": "1.0",
   "description": "Lint for your design guidelines.",

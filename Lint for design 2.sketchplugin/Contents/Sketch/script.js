@@ -1,87 +1,757 @@
-
+const sketch = require('sketch/dom');
 var appName = 'Text Validator', suffix = 'pt';
-;
 
-// //to check all for the selected artboard
-// function checkAll(context) {
-//   checkFontSize(context, );
-//   checkFontFace(context);
-//   checkTextColor(context);
-//   checkTextHeight(context);
-// };
+
+const IDENTIFIER = "com.bpluginbundle.sketchlint";
+
+const DEFINITION_URLS = {
+  color: 'https://api.myjson.com/bins/1cqluc',
+  // font: 'https://api.myjson.com/bins/pgk38',
+  // font: 'https://api.myjson.com/bins/sndcq',
+  font:'https://api.myjson.com/bins/1gyl5a',
+  unit: 'https://api.myjson.com/bins/obu1g'
+};
+
+const DEFAULT_DEFINITIONS = {
+  color: {},
+  font: {},
+  unit: {}
+};
+
+function getPreferences(key) {
+    var userDefaults = NSUserDefaults.standardUserDefaults();
+    if (!userDefaults.dictionaryForKey(IDENTIFIER)) {
+        var defaultPreferences = NSMutableDictionary.alloc().init();
+        defaultPreferences.setObject_forKey(JSON.stringify(DEFAULT_DEFINITIONS.color), "color");
+        defaultPreferences.setObject_forKey(JSON.stringify(DEFAULT_DEFINITIONS.font), "font");
+        defaultPreferences.setObject_forKey(JSON.stringify(DEFAULT_DEFINITIONS.unit), "unit");
+
+        userDefaults.setObject_forKey(defaultPreferences, IDENTIFIER);
+        userDefaults.synchronize();
+    }
+    return JSON.parse(userDefaults.dictionaryForKey(IDENTIFIER).objectForKey(key));
+}
+
+function setPreferences(key, value) {
+    var userDefaults = NSUserDefaults.standardUserDefaults();
+    if (!userDefaults.dictionaryForKey(IDENTIFIER)) {
+        var preferences = NSMutableDictionary.alloc().init();
+    } else {
+        var preferences = NSMutableDictionary.dictionaryWithDictionary(userDefaults.dictionaryForKey(IDENTIFIER));
+    }
+    preferences.setObject_forKey(JSON.stringify(value), key);
+    userDefaults.setObject_forKey(preferences, IDENTIFIER);
+    userDefaults.synchronize();
+}
+
+var fontrules = {  
+   "styles":[  
+      {  
+         "name":"22px / Extra Light",
+         "font":"NunitoSans-ExtraLight",
+         "size":22,
+         "fontweight":3,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Light",
+         "font":"NunitoSans-Light",
+         "size":22,
+         "fontweight":3,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Regular ",
+         "font":"NunitoSans-Regular",
+         "size":22,
+         "fontweight":5,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Semi Bold",
+         "font":"NunitoSans-SemiBold",
+         "size":22,
+         "fontweight":8,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Bold",
+         "font":"NunitoSans-Bold",
+         "size":22,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Extra Bold",
+         "font":"NunitoSans-ExtraBold",
+         "size":22,
+         "fontweight":10,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Black",
+         "font":"NunitoSans-Black",
+         "size":22,
+         "fontweight":11,
+         "color":{  
+            "red":0.007843137254901959,
+            "green":0.1254901960784314,
+            "blue":0.2784313725490196,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H1 ",
+         "font":"NunitoSans-Bold",
+         "size":120,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H2",
+         "font":"NunitoSans-Bold",
+         "size":80,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H3",
+         "font":"Montserrat-SemiBold",
+         "size":60,
+         "fontweight":8,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H4",
+         "font":"NunitoSans-Bold",
+         "size":40,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H5",
+         "font":"NunitoSans-Bold",
+         "size":30,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/black",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/regular/black ",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/regular/white",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/Regular/Grey 400",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.6,
+            "green":0.6,
+            "blue":0.6,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Grey",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.6,
+            "green":0.6,
+            "blue":0.6,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/White",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Green",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2980392156862745,
+            "green":0.8862745098039215,
+            "blue":0.6549019607843137,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Red",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.8862745098039215,
+            "green":0.2980392156862745,
+            "blue":0.2980392156862745,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Orange",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.9450980392156862,
+            "green":0.6313725490196078,
+            "blue":0.3254901960784314,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/regular/Orange",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.9450980392156862,
+            "green":0.6313725490196078,
+            "blue":0.3254901960784314,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/Regular/Green",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.2980392156862745,
+            "green":0.8862745098039215,
+            "blue":0.6549019607843137,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Body Text / grey ",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px / Placeholder text",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.6,
+            "green":0.6,
+            "blue":0.6,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Input Text / Black",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Error text",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":1,
+            "green":0.4196078431372549,
+            "blue":0.4196078431372549,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / success text",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.2980392156862745,
+            "green":0.8862745098039215,
+            "blue":0.6549019607843137,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.007843137254901959,
+            "green":0.1254901960784314,
+            "blue":0.2784313725490196,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label / Red",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.8862745098039215,
+            "green":0.2980392156862745,
+            "blue":0.2980392156862745,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Warning text ",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.9450980392156862,
+            "green":0.6313725490196078,
+            "blue":0.3254901960784314,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"Paragraph text/Dark",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":24
+      },
+      {  
+         "name":"14px / Label / Blue",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.1764705882352941,
+            "green":0.3058823529411765,
+            "blue":0.9607843137254902,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label / Lighter",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"22px / Bold / White ",
+         "font":"NunitoSans-Bold",
+         "size":22,
+         "fontweight":9,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Body Text / Black",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Blue",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.1764705882352941,
+            "green":0.3058823529411765,
+            "blue":0.9607843137254902,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px / Input Text / Grey",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.6,
+            "green":0.6,
+            "blue":0.6,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Input Text / White",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"Body Text / White",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px / Label / White",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Input Text ",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.007843137254901959,
+            "green":0.1254901960784314,
+            "blue":0.2784313725490196,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"Heading/H6",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"Heading/H5",
+         "font":"NunitoSans-Bold",
+         "size":18,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":27
+      },
+      {  
+         "name":"Heading/H4",
+         "font":"NunitoSans-Bold",
+         "size":22,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":33
+      },
+      {  
+         "name":"Heading/H3",
+         "font":"NunitoSans-Bold",
+         "size":26,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":39
+      },
+      {  
+         "name":"Heading/H2",
+         "font":"NunitoSans-Bold",
+         "size":30,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":45
+      },
+      {  
+         "name":"Heading/H1",
+         "font":"NunitoSans-Bold",
+         "size":34,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":51
+      },
+      {  
+         "name":"Body Text / Blue",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px / Label / White",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":21
+      }
+   ]
+};
 
 
 // MAIN FUNCTIONS
 
-// to check font size and fontface for the selected artboard
-function checkFontSize(context) {
-  var contextnew = context.selection.objectAtIndex(0);
-  var artboardType = checkArtboard(context);
-  
-  // ################################ enter the allowed font sizes for android, mweb, iOS and web
-  if (artboardType == "android"){
-    var fontAllowed = [12,14,16,24];
-  }
-  if (artboardType == "mweb"){
-    var fontAllowed = [12,14,18,24,36];
-  }
-  if (artboardType == "iOS"){
-    var fontAllowed = [12,13,14,16,17,24];
-  }
-  if (artboardType == "web"){
-    var fontAllowed = [12,14,18,24,36];
-  }
-  log(artboardType);
-  fontSize(contextnew,fontAllowed);
-};
-
-// to check the correct font face
-function checkFontFace(context){
-  var contextnew = context.selection.objectAtIndex(0);
-  fontFace(contextnew);
-};
-
 // to check for text color for selected artboard
-function checkTextColor(context) {
+function checkTextColor(context, colorRules) {
   var contextnew = context.selection.objectAtIndex(0);
-  var artboardType = checkArtboard(context);
-  
-  // ################################ enter the allowed font colors
-  if ((artboardType == "android")||(artboardType == "iOS")){
-    var colorAllowed = ["#000000","#2D2D32","#787887", "#FFFFFF","#14BEF0","#FF2D00","#00A500"];
-  }
-  if ((artboardType == "web")||(artboardType == "mweb")){
-    var colorAllowed = ["#000000","#414146","#787887", "#FFFFFF","#01A400","#FF2D00","#14BEF0","#14BEF0","#28328C"];
-  }
-  
-  textColor(contextnew, colorAllowed);
-};
-
-// to check for line height for selected artboard
-function checkTextHeight(context) {
-  var contextnew = context.selection.objectAtIndex(0);
-  var artboardType = checkArtboard(context);
-
-  // ################################ enter the allowed line heights  
-
-  var lineHeightAllowed = [0,1, 1.33, 1.5, 1.75];
-  textHeight(contextnew, lineHeightAllowed);
+  var artboardType = checkArtboard(context);  
+  textColor(context, contextnew, colorRules);
 };
 
 // to check the layer colors
 function checkColor(context) {
+  var colorRules =  getPreferences('color');  
+  if(Object.keys(colorRules).length == 0){
+    updateDefinitions();
+    var colorRules =  getPreferences('color');  
+  }
   var contextnew = context.selection.objectAtIndex(0);
   var artboardType = checkArtboard(context);
-
-  // ################################ enter the allowed layer background colors
-  var colorAllowed = ["#000000","#2D2D32","#787887", "#FFFFFF","#14BEF0","#FF2D00","#00A500" ,"#28328C", "#FFFFFF", "#F0F0F5", "#B4B4BE", "#FFD700", "#FF2166", "FFC74D"];
-  color(contextnew, colorAllowed);
+  color(context, contextnew, colorRules);
+  checkTextColor(context, colorRules);
 };
 
 // to check for spelling
 function checkSpelling(context){
   var contextnew = context.selection.objectAtIndex(0);
-  spelling(contextnew);
+  spelling(context, contextnew);
 };
 
 // to check text contrast
@@ -129,39 +799,699 @@ function checkContrast (context){
   }
 };
 
+function checkFont(context){
+  updateDefinitions();
+
+  var contextnew = context.selection.objectAtIndex(0);
+  var artboardType = checkArtboard(context);
+  // check fontsize + line height + weight
+  typography(context, contextnew, artboardType);
+}
+
+function displayPaddingErrors (artboard, errors) {
+  const container = new sketch.Group({
+    parent: artboard,
+    name: 'Padding errors'
+  });
+
+  errors.forEach(error => {
+    new sketch.Shape({
+      parent: container,
+      frame: new sketch.Rectangle(error.x, error.y, 2, error.height),
+      style: {
+        fills: ['#FF0202'],
+        borders: [],
+      }
+    });
+    new sketch.Text({
+      text: `${error.height.toFixed()}pt`,
+      parent: container,
+      frame: new sketch.Rectangle(error.x + 4, error.y),
+      style: {
+        fills: ['#FF0202'],
+        borders: [],
+      }
+    });
+  });
+}
+
+function updateDefinitions () {
+  Object.keys(DEFINITION_URLS).forEach(key => {
+    var request = NSMutableURLRequest.alloc().init();
+    request.setHTTPMethod_("GET");
+    request.setURL_(NSURL.URLWithString_(DEFINITION_URLS[key]));
+    const responseData = NSURLConnection.sendSynchronousRequest_returningResponse_error_(request,nil,nil);
+    setPreferences(key, JSON.parse(NSString.alloc().initWithData_encoding_(responseData,NSUTF8StringEncoding)));
+  });
+}
+
+function getLayerList(
+  items,
+  matchRule = () => true,
+  skipRule = () => false,
+  offset = { x: 0, y: 0 }
+) {
+  // log("item:" + items);
+
+  items = Array.isArray(items) ? items : items.layers || [];
+
+  
+
+  return items.reduce((acc, next) => {
+    if (skipRule(next)) {
+      return acc;
+    }
+    const computedOffset = {
+      x: next.frame ? next.frame.x + offset.x : offset.x,
+      y: next.frame ? next.frame.y + offset.y : offset.y
+    };
+    let layers = [];
+    if (next.layers && next.layers.length) {
+      layers = getLayerList(next.layers, matchRule, skipRule, computedOffset);
+    }
+    if (matchRule(next)) {
+      next.position = computedOffset;
+      layers.unshift(next);
+    }
+    return acc.concat(layers);
+  }, []);
+}
+
 // SUPPORTING FUNCTIONS
 
-// to check for the type of platfrom designing for
-// function checkArtboard (context){
-//   var text = '',
-//       app = NSApplication.sharedApplication(),
-//       doc = context.document,
-//       documentName = doc.displayName(),
-//       pages = doc.pages()
-//       artboardType = "web";
+function validateDistance (num) {
+  const DISTANCES = Object.values(getPreferences('unit'));
+  if (num > 0 && num < DISTANCES[0]) {
+    // log("this is after" + num);
+    return DISTANCES.includes(num);
+  }
+  return true;
+}
 
-//   for (var i = 0; i < pages.length; i++) {
-//     var validPage = true;
-//     var pageName = pages[i];
+function checkPadding (context) {
+  updateDefinitions();
+  var doc = context.document;
+  const document = sketch.getSelectedDocument();
 
-//     if( ((pages[i].name()) != "Symbols")  && (pages[i].artboards().count() != 0 )){
-//       var artboards = pages[i].artboards();
-//       var firstArtboard = artboards.firstObject();
-//       var artboardWidth = firstArtboard.frame().width();
-//     }
-//   }
-//   log("artboardWidth" + artboardWidth);
-//   if(artboardWidth == 320){
-//     artboardType = "mweb";
-//   }
-//   if(artboardWidth == 375){
-//     artboardType = "ios";
-//   }
-//   if(artboardWidth == 360){
-//     artboardType = "android";
-//   }
-//   return (artboardType);
-// };
+  var artboard = sketch.fromNative(context.selection.objectAtIndex(0));
+
+      const errors = [];
+      const layers = getLayerList(
+        artboard,
+        item => !['Page', 'Artboard', 'Group'].includes(item.type),
+        item => item.hidden
+      ).filter(layer => layer.type).sort((a, b) => a.position.y - b.position.y);
+
+      if (!layers.length) return;
+
+      // Check first layer distance from the top
+      if (!validateDistance(layers[0].position.y)) {
+        errors.push({
+          x: layers[0].position.x + layers[0].frame.width / 2,
+          y: 0,
+          height: layers[0].position.y
+        });
+      }
+      
+      layers.forEach(layer => {
+        // Find the top/bottom distances inside containes such as background images
+        if (['Image', 'Rectangle', 'Gradient'].includes(layer.type)) {
+
+          const containedLayers = layers.filter(itemToCheck => (
+            itemToCheck.id !== layer.id &&
+            itemToCheck.position.y >= layer.position.y &&
+            itemToCheck.position.y + itemToCheck.frame.height <= layer.position.y + layer.frame.height &&
+            itemToCheck.position.x >= layer.position.x &&
+            itemToCheck.position.x + itemToCheck.frame.width <= layer.position.x + layer.frame.width
+          ));
+          if (containedLayers.length) {
+            const containedLayersByStart = [].concat(containedLayers).sort((a, b) => a.position.y - b.position.y);
+            const containedLayersByEnd = [].concat(containedLayers).sort((a, b) =>
+              a.position.y + a.frame.height - (b.position.y + b.frame.height));
+            const firstContainedElement = containedLayersByStart[0];
+            const lastContainedElement = containedLayersByEnd[containedLayersByEnd.length - 1];
+
+            // Check the first contained layer against the top of the container
+            if (!validateDistance(firstContainedElement.position.y - layer.position.y)) {
+              errors.push({
+                x: firstContainedElement.position.x + firstContainedElement.frame.width / 2,
+                y: layer.position.y,
+                height: firstContainedElement.position.y - layer.position.y
+              });
+            }
+
+            // Check the last contained layer against the bottom of the container
+            if (!validateDistance(
+              layer.position.y + layer.frame.height - (lastContainedElement.position.y + lastContainedElement.frame.height)
+            )) {
+              errors.push({
+                x: lastContainedElement.position.x + lastContainedElement.frame.width / 2,
+                y: lastContainedElement.position.y + lastContainedElement.frame.height,
+                height: layer.position.y + layer.frame.height - (lastContainedElement.position.y + lastContainedElement.frame.height)
+              });
+            }
+          }
+        }
+
+        const layerEnd = layer.position.y + layer.frame.height;
+        const nextItem = layers.find(itemToCompare => layerEnd < itemToCompare.position.y);
+
+        if (nextItem) {
+          // Check the distance between two items
+          if (!validateDistance(nextItem.position.y - layerEnd)) {
+            errors.push({
+              x: (Math.max(layer.position.x, nextItem.position.x) + Math.min(layer.position.x + layer.frame.width, nextItem.position.x + nextItem.frame.width)) / 2,
+              y: layerEnd,
+              height: nextItem.position.y - layerEnd
+            });
+          }
+          
+        } else {
+          // Check the distance between item end and page end
+          if (!validateDistance(artboard.frame.height - layerEnd)) {
+            errors.push({
+              x: (layer.position.x + layer.frame.width) / 2,
+              y: layerEnd,
+              height: artboard.frame.height - layerEnd
+            });
+          }
+        }
+      });
+
+      if (errors.length) {
+        doc.showMessage("The marked areas have padding issues. Happy fixing 😊");
+        displayPaddingErrors(artboard, errors);
+      }
+      else {
+        doc.showMessage("Well done 🙌 No issues found.");
+      }
+}
+
+function calculateMatchScore(fontSize, fontFamily, lineHeight, fontWeight, textColor, ruleItem, maxFontSize, maxLineHeight, maxFontWeight){
+
+  // score for font name matching -> lower the better
+  var fontnameMatchScore = 1-similarity(fontFamily, ruleItem.font);
+
+  // test for fuzzy logic
+  // var ruleItemFont = ruleItem.font;
+  // var ruleItemFontObj = ruleItemFont.toString();
+  // var fontFamilyObj = fontFamily.toString();
+
+  // var result = ruleItemFontObj.fontNameScore(fontFamilyObj, 0.5);
+  // var fontnameMatchScore = 1- fontFamily.fontNameScore(ruleItem.font, 0.5);
+
+
+  // score for fontWeight -> lower the better
+  var fontweightMatchScore = Math.abs((fontWeight - ruleItem.fontweight)/maxFontWeight);
+
+  // score for lineHeight -> lower the better
+  var lineheightMatchScore = Math.abs((lineHeight - ruleItem.lineHeight)/maxLineHeight);
+
+  // score for fontsize -> lower the better
+  var thsiis = (fontSize - ruleItem.size)/maxFontSize;
+  // log("fontsizeMatchScore:" + thsiis);
+
+  var fontsizeMatchScore = Math.abs((fontSize - ruleItem.size)/maxFontSize);
+  
+  // score for textcolor -> lower the better
+  var myRegexp = /\(r:(.*) g:(.*) b:(.*) a:(.*)\)/g;
+  var colorValues = myRegexp.exec(textColor);
+
+  var redColorValue = (Math.round(colorValues[1] * 100) / 100)*255;
+  var greenColorValue = (Math.round(colorValues[2] * 100) / 100)*255;
+  var blueColorValue = (Math.round(colorValues[3] * 100) / 100)*255;
+
+  var redRule = (Math.round(ruleItem.color.red * 100) / 100)*255;
+  var greenRule = (Math.round(ruleItem.color.green * 100) / 100)*255;
+  var blueRule = (Math.round(ruleItem.color.blue * 100) / 100)*255;
+
+  var colorMatchScore = deltaE([redColorValue, greenColorValue, blueColorValue], [redRule, greenRule, blueRule])/100;
+
+  var matchScore = {fontnameMatchScore: fontnameMatchScore,fontweightMatchScore: fontweightMatchScore, lineheightMatchScore:lineheightMatchScore, fontsizeMatchScore:fontsizeMatchScore, colorMatchScore:colorMatchScore}
+  return matchScore;
+}
+
+function similarity(s1, s2) {
+  if(s1.length > s2.length){
+    var longer = s1;
+    var shorter = s2;
+  }else{
+    var longer = s2;
+    var shorter = s1;
+  }
+ 
+  var longerLength = longer.length;
+  if (longerLength == 0) {
+    return 1.0;
+  }
+  return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+}
+
+function editDistance(s1, s2) {
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
+
+  var costs = new Array();
+  for (var i = 0; i <= s1.length; i++) {
+    var lastValue = i;
+    for (var j = 0; j <= s2.length; j++) {
+      if (i == 0)
+        costs[j] = j;
+      else {
+        if (j > 0) {
+          var newValue = costs[j - 1];
+          if (s1.charAt(i - 1) != s2.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue, lastValue),
+              costs[j]) + 1;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
+        }
+      }
+    }
+    if (i > 0)
+      costs[s2.length] = lastValue;
+  }
+  return costs[s2.length];
+}
+
+
+function deltaE(rgbA, rgbB) {
+  let labA = rgb2lab(rgbA);
+  let labB = rgb2lab(rgbB);
+  let deltaL = labA[0] - labB[0];
+  let deltaA = labA[1] - labB[1];
+  let deltaB = labA[2] - labB[2];
+  let c1 = Math.sqrt(labA[1] * labA[1] + labA[2] * labA[2]);
+  let c2 = Math.sqrt(labB[1] * labB[1] + labB[2] * labB[2]);
+  let deltaC = c1 - c2;
+  let deltaH = deltaA * deltaA + deltaB * deltaB - deltaC * deltaC;
+  deltaH = deltaH < 0 ? 0 : Math.sqrt(deltaH);
+  let sc = 1.0 + 0.045 * c1;
+  let sh = 1.0 + 0.015 * c1;
+  let deltaLKlsl = deltaL / (1.0);
+  let deltaCkcsc = deltaC / (sc);
+  let deltaHkhsh = deltaH / (sh);
+  let i = deltaLKlsl * deltaLKlsl + deltaCkcsc * deltaCkcsc + deltaHkhsh * deltaHkhsh;
+  return i < 0 ? 0 : Math.sqrt(i);
+}
+
+function rgb2lab(rgb){
+  let r = rgb[0] / 255, g = rgb[1] / 255, b = rgb[2] / 255, x, y, z;
+  r = (r > 0.04045) ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+  g = (g > 0.04045) ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+  b = (b > 0.04045) ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
+  x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
+  y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.00000;
+  z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
+  x = (x > 0.008856) ? Math.pow(x, 1/3) : (7.787 * x) + 16/116;
+  y = (y > 0.008856) ? Math.pow(y, 1/3) : (7.787 * y) + 16/116;
+  z = (z > 0.008856) ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
+  return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)]
+}
+
+// find the max number for each category. Divide 1 by that number. Multiply every item with this. 
+function normalize(totalScoreArray){
+  var totalScoreArrayNew = [];
+  for ( var i = 0; i < totalScoreArray.length; i++ ) {
+    totalScoreArrayNew [i] = new Array(5);
+  }
+
+  for(j=0;j<5; j++){
+    var maxScore = 0;
+
+    for(i=0; i<totalScoreArray.length; i++){
+      if(totalScoreArray[i][j]> maxScore){
+        maxScore = totalScoreArray[i][j];
+        var item = i;
+      }
+    }
+    // log("start");
+
+    // log("maxScore for " + j + ": " + maxScore + "for item : " + item);
+
+    var normalizeFactor = 1/maxScore;
+    // log("normalizeFactor" + normalizeFactor);
+
+    // log("this is it");
+    for(i=0; i<totalScoreArray.length; i++){
+      // log ("this");
+      // log(totalScoreArray[i][j]);
+      totalScoreArrayNew[i][j] =  totalScoreArray[i][j] * normalizeFactor;
+      // log(totalScoreArray[i][j]);
+    }
+
+    for(i=0; i<totalScoreArray.length; i++){
+      if(totalScoreArray[i][j]> maxScore){
+        maxScore = totalScoreArray[i][j];
+        var item = i;
+      }
+    }
+    // log("maxScore for " + j + ": " + maxScore + "for item : " + item);
+    // log("end");
+
+  }
+  return totalScoreArrayNew;
+}
+
+String.prototype.fontNameScore = function (word, fuzziness) {
+  'use strict';
+
+  // If the string is equal to the word, perfect match.
+  if (this === word) { return 1; }
+
+  //if it's not a perfect match and is empty return 0
+  if (word === "") { return 0; }
+
+  var runningScore = 0,
+      charScore,
+      finalScore,
+      string = this,
+      lString = string.toLowerCase(),
+      strLength = string.length,
+      lWord = word.toLowerCase(),
+      wordLength = word.length,
+      idxOf,
+      startAt = 0,
+      fuzzies = 1,
+      fuzzyFactor,
+      i;
+
+  // Cache fuzzyFactor for speed increase
+  if (fuzziness) { fuzzyFactor = 1 - fuzziness; }
+
+  // Walk through word and add up scores.
+  // Code duplication occurs to prevent checking fuzziness inside for loop
+  if (fuzziness) {
+    for (i = 0; i < wordLength; i+=1) {
+
+      // Find next first case-insensitive match of a character.
+      idxOf = lString.indexOf(lWord[i], startAt);
+
+      if (idxOf === -1) {
+        fuzzies += fuzzyFactor;
+      } else {
+        if (startAt === idxOf) {
+          // Consecutive letter & start-of-string Bonus
+          charScore = 0.7;
+        } else {
+          charScore = 0.1;
+
+          // Acronym Bonus
+          // Weighing Logic: Typing the first character of an acronym is as if you
+          // preceded it with two perfect character matches.
+          if (string[idxOf - 1] === ' ') { charScore += 0.8; }
+        }
+
+        // Same case bonus.
+        if (string[idxOf] === word[i]) { charScore += 0.1; }
+
+        // Update scores and startAt position for next round of indexOf
+        runningScore += charScore;
+        startAt = idxOf + 1;
+      }
+    }
+  } else {
+    for (i = 0; i < wordLength; i+=1) {
+      idxOf = lString.indexOf(lWord[i], startAt);
+      if (-1 === idxOf) { return 0; }
+
+      if (startAt === idxOf) {
+        charScore = 0.7;
+      } else {
+        charScore = 0.1;
+        if (string[idxOf - 1] === ' ') { charScore += 0.8; }
+      }
+      if (string[idxOf] === word[i]) { charScore += 0.1; }
+      runningScore += charScore;
+      startAt = idxOf + 1;
+    }
+  }
+
+  // Reduce penalty for longer strings.
+  finalScore = 0.5 * (runningScore / strLength    + runningScore / wordLength) / fuzzies;
+
+  if ((lWord[0] === lString[0]) && (finalScore < 0.85)) {
+    finalScore += 0.15;
+  }
+
+  return finalScore;
+};
+
+function typography(context, artboard, artboardType){
+  var fontrules =  getPreferences('font');
+  var UI = require('sketch/ui');
+  // var fontrulesjson = getFontRules(fontrules);
+
+  var doc = context.document;
+  var text = '',
+      app = NSApplication.sharedApplication();
+
+  var validArtboard = true;
+  var layers = artboard.children();
+
+  var newGroup = MSLayerGroup.new(); 
+  newGroup.name = "Font errors";
+
+  // var fixGroup = MSLayerGroup.new(); 
+  // fixGroup.name = "Fix";
+
+  context.document.currentPage().currentArtboard().addLayers([newGroup]);
+
+  for (var k = 0; k < layers.count(); k++) {
+    
+    var layer = layers.objectAtIndex(k);
+
+    // hide the layers in groups which are hidden
+    if(layer.class() == "MSLayerGroup" && (layer.isVisible()==0)){
+      var hiddenLayers = layer.children();
+      for(var g = 0; g < hiddenLayers.count(); g++){
+        hiddenLayers.objectAtIndex(g).setIsVisible(false);
+      }
+    }
+
+
+    if ((layer.class() == "MSTextLayer") && (layer.isVisible()!=0)) {
+      var validFont = false;
+
+      var keys = Object.keys(fontrules.styles);
+      var fontSize = layer.fontSize();
+      var fontFamily = layer.font().fontName();
+      var lineHeight = layer.lineHeight();
+      var fontWeight = NSFontManager.sharedFontManager().weightOfFont_(layer.font());
+      var textColor = layer.textColor();
+
+      var myRegexp = /\(r:(.*) g:(.*) b:(.*) a:(.*)\)/g;
+      var colorValues = myRegexp.exec(textColor);
+
+      var redColorValue = Math.round(colorValues[1] * 100) / 100;
+      var greenColorValue = Math.round(colorValues[2] * 100) / 100;
+      var blueColorValue = Math.round(colorValues[3] * 100) / 100;
+
+      var maxFontSize = 0; var maxLineHeight = 0; var maxFontWeight = 0; 
+      // var firstItem = fontrules.styles[0];
+      // var fontNameArray = [firstItem.font];
+
+      // find the maximum values of each metric and fontnames
+      for( var l = 0; l< keys.length; l++){
+        var ruleItem = fontrules.styles[l];
+        if(maxFontSize < ruleItem.size){
+          maxFontSize = ruleItem.size;
+        }
+        if(maxLineHeight < ruleItem.lineHeight){
+          maxLineHeight = ruleItem.lineHeight;
+        }
+        if(maxFontWeight < ruleItem.fontweight){
+          maxFontWeight = ruleItem.fontweight;
+        }
+      }
+
+      var totalScoreArray = [];
+      // log("totalScoreArray");
+
+      // check if the rules are followed
+      for( var l = 0; l< keys.length; l++){
+        var ruleItem = fontrules.styles[l];
+        var redRule = Math.round(ruleItem.color.red * 100) / 100;
+        var greenRule = Math.round(ruleItem.color.green * 100) / 100;
+        var blueRule = Math.round(ruleItem.color.blue * 100) / 100;
+
+        if( (fontSize == ruleItem.size) && (lineHeight == ruleItem.lineHeight) && (fontFamily == ruleItem.font) && (fontWeight == ruleItem.fontweight) && (redColorValue == redRule)  && (greenColorValue == greenRule)  && (blueColorValue == blueRule)  ){
+           validFont = true;
+           break;
+        }
+        else{
+
+          var matchScore = calculateMatchScore(fontSize, fontFamily, lineHeight, fontWeight, textColor, ruleItem, maxFontSize, maxLineHeight, maxFontWeight);
+          matchScore.ruleNumber = l;
+          var fontnameMatchScore = {ruleNumber : l, totalscore: (matchScore.colorMatchScore + matchScore.fontnameMatchScore + matchScore.fontsizeMatchScore + matchScore.fontweightMatchScore + matchScore.lineheightMatchScore)}; 
+          matchScore.totalscore = (matchScore.colorMatchScore + matchScore.fontnameMatchScore + matchScore.fontsizeMatchScore + matchScore.fontweightMatchScore + matchScore.lineheightMatchScore);
+          
+          // log("matchScore");
+          // log(matchScore);
+          var allMatchScore = {}
+          totalScoreArray [l] = new Array(5);
+          totalScoreArray[l][0] =  matchScore.colorMatchScore;
+          totalScoreArray[l][1] =  matchScore.fontnameMatchScore;
+          totalScoreArray[l][2] =  matchScore.fontsizeMatchScore;
+          totalScoreArray[l][3] =  matchScore.fontweightMatchScore;
+          totalScoreArray[l][4] =  matchScore.lineheightMatchScore;
+
+          // log("rules for" + l + ":");
+          // log (totalScoreArray[l]);
+        }
+      }
+
+
+      // end here
+      var normalizedMatchScore = normalize (totalScoreArray);
+
+      for(i=0;i<normalizedMatchScore.length;i++){
+        // log("rules for" + i + ":");
+        // log (totalScoreArray[i][2]);
+
+        log("normalized rules for" + i + ":");
+        log (normalizedMatchScore[i][2]);
+
+      }
+
+
+      var threeMatchSet = threeMatch(normalizedMatchScore);
+
+      var maxPoints = threeMatchSet[0];
+      var maxIndex = threeMatchSet[1];
+
+      log("maxPoints");
+      log(maxPoints);
+      log("maxIndex");
+      log(maxIndex);
+
+      // var newGroup = MSLayerGroup.new(); 
+      // newGroup.name = "Font fixes for ----";
+
+      var textContent = layer.stringValue();
+      for (i=0;i<3;i++){
+
+        var index = maxIndex[i];
+        var correctRule = fontrules.styles[index];
+
+        var correctFont = correctRule.font;
+        var correctFontSize = correctRule.size;
+        var correctLineHeight = correctRule.lineHeight;
+        var correctFontWeight = correctRule.fontweight;
+        var correctColor = correctRule.color;
+        
+        var correctColorHex = rgbToHex(correctColor.red, correctColor.green, correctColor.blue);
+        var replaceColor = MSImmutableColor.colorWithSVGString(correctColorHex).newMutableCounterpart();
+
+        // create layer over
+        var duplicatedLayer = layer.duplicate();
+        // duplicatedLayer.stringValue = "this is shit";
+        duplicatedLayer.name = "variation :" +(i+1) + " | fixed text style";
+        duplicatedLayer.setFontPostscriptName(correctFont);
+        duplicatedLayer.fontSize = correctFontSize;
+        duplicatedLayer.lineHeight = correctLineHeight;
+        duplicatedLayer.setTextColor(replaceColor);
+      }
+
+      if(!validFont){
+        var layerName = "Text rule error";
+
+        // display the error
+        var layerNew = layer;
+        var positionX = layerNew.frame().x(); 
+        var positionY = layerNew.frame().y();
+
+        while (layerNew.parentGroup().class() == "MSLayerGroup"){
+          positionX += layerNew.parentGroup().frame().x() ;
+          positionY += layerNew.parentGroup().frame().y() ;
+          layerNew = layerNew.parentGroup();
+        }
+
+        var x = positionX + (layer.frame().width()/2);
+        var y = positionY + (layer.frame().height()/2);
+
+        var shapeGroup = MSShapeGroup.shapeWithRect(NSMakeRect(x-5,y-5,10,10));
+
+        shapeGroup.name = layerName;
+        var fill = shapeGroup.style().addStylePartOfType(0);
+        fill.color = MSColor.colorWithRGBADictionary({r: 0.8, g: 0.1, b: 0.1, a: 1});
+
+        newGroup.addLayers([shapeGroup]);
+      }
+      else {
+        layerName = ''
+      }
+
+    }
+  }
+
+  if (layerName == '') {
+    doc.showMessage("Well done 🙌 No issues found.");
+  } else {
+    doc.showMessage("The text layers marked in red have font issues. Happy fixing 😊");
+  }
+};
+
+function threeMatch(totalScoreArray){
+  var maxIndex = new Array();
+  var maxPoints = new Array();
+  for (var i = 0; i < totalScoreArray.length; i ++) {
+    if (i === 0) {
+      maxPoints.push(totalScoreArray[i]);
+      maxIndex.push(i);
+    } else if (i === 1) {
+      if (totalScoreArray[i] < maxPoints[0]) {
+        maxPoints.push(maxPoints[0]);       
+        maxPoints[0] = totalScoreArray[i];
+        maxIndex.push(maxIndex[0]);
+        maxIndex[0] = i;
+      } else {
+        maxPoints.push(totalScoreArray[i]);
+        maxIndex.push(i);
+      }
+    } else if (i === 2) {
+      if (totalScoreArray[i] < maxPoints[0]) {
+        maxPoints.push(maxPoints[0]);
+        maxPoints[1] = maxPoints[0];
+        maxPoints[0] = totalScoreArray[i];
+        maxIndex.push(maxIndex[0]);
+        maxIndex[1] = maxIndex[0];
+        maxIndex[0] = i;
+        
+      } else {
+        if (totalScoreArray[i] < maxPoints[1]) {
+          maxPoints.push(maxPoints[1]);
+          maxPoints[1] = totalScoreArray[i];
+          maxIndex.push(maxIndex[1]);
+          maxIndex[1] = i;
+        } else {
+          maxPoints.push(totalScoreArray[i]);
+          maxIndex.push(i);
+        }
+      }
+    } else {
+      if (totalScoreArray[i] < maxPoints[0]) {
+        maxPoints[2] = maxPoints[1];
+        maxPoints[1] = maxPoints[0];
+        maxPoints[0] = totalScoreArray[i];
+        maxIndex[2] = maxIndex[1];
+        maxIndex[1] = maxIndex[0];
+        maxIndex[0] = i;
+      } else {
+        if (totalScoreArray[i] < maxPoints[1]) {
+          maxPoints[2] = maxPoints[1];
+          maxPoints[1] = totalScoreArray[i];
+          maxIndex[2] = maxIndex[1];
+          maxIndex[1] = i;
+        } else if(totalScoreArray[i] < maxPoints[2]) {
+          maxPoints[2] = totalScoreArray[i];
+          maxIndex[2] = i;
+        }
+      }
+    }
+  }
+  return [maxPoints, maxIndex];
+}
 
 function checkArtboard (context){
   var doc = context.document;
@@ -191,18 +1521,27 @@ function rgbToHex(r, g, b) {
     var red = "00";
   }else{
     var red = Math.round(r*255).toString(16);
+    if(red.length == 1){
+      red = "0" + red;
+    }
   }
 
   if (Math.round(g*255).toString(16) == "0"){
     var green = "00";
   }else{
     var green = Math.round(g*255).toString(16);
+    if(green.length == 1){
+      green = "0" + green;
+    }
   }
 
   if (Math.round(b*255).toString(16) == "0"){
     var blue = "00";
   }else{
     var blue = Math.round(b*255).toString(16);
+    if(blue.length == 1){
+      blue = "0" + blue;
+    }
   }
 
   return ("#" + red.toUpperCase() + green.toUpperCase() + blue.toUpperCase());
@@ -217,14 +1556,74 @@ var hexToRGB = function(hex, alpha) {
     return NSColor.colorWithCalibratedRed_green_blue_alpha(red, green, blue, alpha)
 };
 
+function hslToRgb(h, s, l){
 
-// PER ARTBOARD
-function color(artboard, colorSizeSet){
+  var r, g, b;
+
+  if(s == 0){
+      r = g = b = l; // achromatic
+  }else{
+      var hue2rgb = function hue2rgb(p, q, t){
+          if(t < 0) t += 1;
+          if(t > 1) t -= 1;
+          if(t < 1/6) return p + (q - p) * 6 * t;
+          if(t < 1/2) return q;
+          if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+          return p;
+      }
+
+      var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      var p = 2 * l - q;
+      r = hue2rgb(p, q, h + 1/3);
+      g = hue2rgb(p, q, h);
+      b = hue2rgb(p, q, h - 1/3);
+  }
+  return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+}
+
+function colorSetRGB(colorSetValue){
+
+  var colorSetValueRgb = [];
+  for(i =0; i<colorSetValue.length; i++){
+    colorSetValueRgb[i]= hslToRgb(colorSetValue[i][0]/360, colorSetValue[i][1]/100, colorSetValue[i][2]/100);
+    // var colorSetValueRgb = 
+  }
+  return(colorSetValueRgb);
+}
+
+function colorSet(colorRules, hsl, a) {
+
+  var keys = Object.keys(colorRules);
+  for(var i =0; i<keys.length; i++){
+    key = keys[i];
+
+    if(key == "hsl"){
+      var hslLength = hsl.length;
+      hsl[hslLength] = colorRules[key];
+      // a++;
+      // log("here");
+      // log("a:" + a);
+    }
+
+    if ( (Object.keys(colorRules[key])).length > 0){
+      colorSet(colorRules[key], hsl, a);
+    }
+  }
+  return(hsl);
+}
+
+function color(context, artboard, colorRules){
+  var doc = context.document;
   var text = '',
       app = NSApplication.sharedApplication();
 
   var validArtboard = true;
   var layers = artboard.children();
+  var hsl = []; 
+
+  var colorSetValue = colorSet(colorRules, hsl, 0);
+
+  var colorSetValueRgb = colorSetRGB(colorSetValue);
 
   for (var k = 0; k < layers.count(); k++) {
 
@@ -237,11 +1636,12 @@ function color(artboard, colorSizeSet){
     var layerObject = layers.objectAtIndex(k);
 
     if ((layerObject.class() == "MSShapeGroup") && (layerObject.isVisible)){
-
+      
       // check if the layer is visually visible
 
       // https://github.com/nathco/Swap-Fill-Border/blob/master/Swap-Fill-Border.sketchplugin/Contents/Sketch/Swap-Fill-Border.js
       var fillCount = layerObject.style().fills().count();
+      
       var bordersCount = layerObject.style().borders().count();
       var visibleFill = false;
       var visibleBorder = false;
@@ -257,23 +1657,23 @@ function color(artboard, colorSizeSet){
           visibleBorder = true;
         }
       }
-
     }
 
     if ((layerObject.class() == "MSShapeGroup") && (layerObject.isVisible()!=0) && (visibleFill > 0))  {
       var validColor = false;
 
       // all text properties are here : http://developer.sketchapp.com/reference/api/file/api/Text.js.html#lineNumber48
-      
       var layerColor = layerObject.style().fills().objectAtIndex(0).color();
       var myRegexp = /\(r:(.*) g:(.*) b:(.*) a:(.*)\)/g;
       var colorValues = myRegexp.exec(layerColor);
+      // log("colorValues:" + colorValues);
+      // log("here" +"1:" + Math.round(parseFloat(colorValues[1])*255) + "2:" + Math.round(parseFloat(colorValues[2])*255) + "3:" + Math.round(parseFloat(colorValues[3])*255) )
 
-      var rgbColor = rgbToHex( parseFloat(colorValues[1]), parseFloat(colorValues[2]), parseFloat(colorValues[3]));
 
-      // check color valid or not
-      for (var l = 0; l < colorSizeSet.length; l++) {
-        if (rgbColor === colorSizeSet[l]) {
+
+      for (var l = 0; l < colorSetValueRgb.length; l++) {
+        // log("1:" + colorSetValueRgb[l][0] + "2:" + colorSetValueRgb[l][1] + "3:" + colorSetValueRgb[l][2] )
+        if( Math.round(parseFloat(colorValues[1])*255) == colorSetValueRgb[l][0] && Math.round(parseFloat(colorValues[2])*255) == colorSetValueRgb[l][1] && Math.round(parseFloat(colorValues[3])*255) == colorSetValueRgb[l][2]) {
           validColor = true;
           break;
         }
@@ -301,8 +1701,8 @@ function color(artboard, colorSizeSet){
       var rgbColor = rgbToHex( parseFloat(colorValues[1]), parseFloat(colorValues[2]), parseFloat(colorValues[3]));
 
       // check color valid or not
-      for (var l = 0; l < colorSizeSet.length; l++) {
-        if (rgbColor === colorSizeSet[l]) {
+      for (var l = 0; l < colorSetValueRgb.length; l++) {
+        if( Math.round(parseFloat(colorValues[1])*255) == colorSetValueRgb[l][0] && Math.round(parseFloat(colorValues[2])*255) == colorSetValueRgb[l][1] && Math.round(parseFloat(colorValues[3])*255) == colorSetValueRgb[l][2]) {
           validColor = true;
           break;
         }
@@ -322,62 +1722,18 @@ function color(artboard, colorSizeSet){
   }
 
   if (text == '') {
-    app.displayDialog_withTitle("Well done. 🙌", "No issues found." +"\n" );
+    doc.showMessage("Well done 😎, no issues found.");
   } else {
-    app.displayDialog_withTitle("Happy fixing. 😇","The layers marked in red have wrong fill colors. In yellow have wrong border colors." +"\n");
+    // doc.showMessage("The marked areas have padding issues. Happy fixing 😊");
+    doc.showMessage("The layers marked in red have wrong fill colors, in yellow have wrong border colors. Happy fixing 😊");
   }
 };
 
-function fontSize(artboard, fontSizeSet) {
+function spelling(context, artboard){
   var text = '',
       app = NSApplication.sharedApplication();
 
-  var validArtboard = true;
-  var layers = artboard.children();
-
-  for (var k = 0; k < layers.count(); k++) {
-    if(layers.objectAtIndex(k).class() == "MSLayerGroup" && (layers.objectAtIndex(k).isVisible()==0)){
-      var hiddenLayers = layers.objectAtIndex(k).children();
-      for(var g = 0; g < hiddenLayers.count(); g++){
-        hiddenLayers.objectAtIndex(g).setIsVisible(false);
-      }
-    }
-
-    if ((layers.objectAtIndex(k).class() == "MSTextLayer") && (layers.objectAtIndex(k).isVisible()!=0)) {
-      var validFont = false;
-      // all text properties are here : http://developer.sketchapp.com/reference/api/file/api/Text.js.html#lineNumber48
-      // check font valid or not
-      for (var l = 0; l < fontSizeSet.length; l++) {
-
-        if (layers.objectAtIndex(k).fontSize() === fontSizeSet[l]) {
-          validFont = true;
-          break;
-        }
-      }
-
-      // check text font
-      if (!validFont) {
-        layers.objectAtIndex(k).style().addStylePartOfType(1);
-        layers.objectAtIndex(k).style().borders().objectAtIndex(0).setThickness(2);
-        layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setRed(1);
-        layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setGreen(0.13);
-        layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setBlue(0.40);
-        text = "wrong text layer"; 
-      }
-    }
-  }
-
-  if (text == '') {
-    app.displayDialog_withTitle("Well done. 🙌", "No issues found." +"\n" );
-  } else {
-    app.displayDialog_withTitle("Happy fixing. 😇", "The text layers marked in red have wrong font size.");
-  }
-};
-
-function spelling(artboard){
-  var text = '',
-      app = NSApplication.sharedApplication();
-
+  var doc = context.document;
   var validArtboard = true;
   var layers = artboard.children();
   var validSpelling = true;
@@ -400,7 +1756,7 @@ function spelling(artboard){
         validSpelling = false;
         var endString = rangeString.location + rangeString.length;
         var misSpelledWord = stringValue.substring(rangeString.location, endString);
-        var color = hexToRGB('FF2166');
+        var color = hexToRGB('FF0202');
 
         layers.objectAtIndex(k).setIsEditingText(true);
         layers.objectAtIndex(k).addAttribute_value_forRange(NSForegroundColorAttributeName, color, rangeString);
@@ -417,53 +1773,11 @@ function spelling(artboard){
     
 
   if (validSpelling) {
-    app.displayDialog_withTitle("Well done. 🙌", "No issues found." +"\n" );
+
+    doc.showMessage("Well done 🙌 No issues found.");
   } else {
-    app.displayDialog_withTitle("Happy fixing. 😇", "The text layers marked in red have wrong spelling.");
-  }
-};
-
-function fontFace(artboard) {
-  var text = '',
-      app = NSApplication.sharedApplication();
-
-  var validArtboard = true;
-  var layers = artboard.children();
-
-  for (var k = 0; k < layers.count(); k++) {
-
-    if(layers.objectAtIndex(k).class() == "MSLayerGroup" && (layers.objectAtIndex(k).isVisible()==0)){
-      var hiddenLayers = layers.objectAtIndex(k).children();
-      for(var g = 0; g < hiddenLayers.count(); g++){
-        hiddenLayers.objectAtIndex(g).setIsVisible(false);
-      }
-    }
-
-    if ((layers.objectAtIndex(k).class() == "MSTextLayer") && (layers.objectAtIndex(k).isVisible()!=0)) {
-      var validFontName = false;
-
-      // all text properties are here : http://developer.sketchapp.com/reference/api/file/api/Text.js.html#lineNumber48
-      
-      if ((layers.objectAtIndex(k).font().fontName() == "CamphorPro-Bold") || (layers.objectAtIndex(k).font().fontName() == "CamphorPro-Regular")) {
-        validFontName = true;
-      }
-
-      if (!validFontName){
-        layers.objectAtIndex(k).style().addStylePartOfType(1);
-        layers.objectAtIndex(k).style().borders().objectAtIndex(0).setThickness(2);
-        layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setRed(1);
-        layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setGreen(0.13);
-        layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setBlue(0.40);
-        text = "wrong text layer";
-      }
-    }
-  }
-
-  if (text == '') {
-    app.displayDialog_withTitle("Well done. 🙌", "No issues found." +"\n" );
-  } else {
-    app.displayDialog_withTitle("Happy fixing. 😇", "The text layers marked in red have wrong font face.");
-  }
+    doc.showMessage("The text layers marked in red have spelling issues. Happy fixing 😊");
+   } 
 };
 
 function getColorOfLayer(layer) {
@@ -484,6 +1798,8 @@ function getColorOfLayer(layer) {
   }
   else{
     var fill = layer.style().fills().firstObject();
+    // log("fills :" + fill);
+
     color = fill.color();
   }
   return [isText, textLayer, color];
@@ -557,7 +1873,7 @@ function contrast(color1, color2) {
 
 function displayConstrast (doc, textLayer, result) {
   // Check against AA / AAA
-  var status = "😢 AA Failed";
+  var status = "Contrast: AA Failed 😢";
   var fontSize = 14;
 
   if (textLayer != null) {
@@ -571,122 +1887,83 @@ function displayConstrast (doc, textLayer, result) {
 
 
   if ((fontSize >= 18 || (fontSize >= 14 && isBold)) && result >=3) {
-    status = "😎 AA passed (large text)";
+    status = "Contrast: AA passed (large text) 😎";
   }
 
   if(result >= 4.5) {
-    status = "😎 AA passed";
+    status = "Contrast: AA passed 😎";
   }
 
   if ((fontSize >= 18 || (fontSize >= 14 && isBold)) && result >=4.5) {
-    status = "😎 AAA passed (large text)";
+    status = "Contrast: AAA passed (large text) 😎";
   }
 
   if(result >= 7.0) {
-    status = "😎 AAA passed";
+    status = "Contrast: AAA passed 😎";
   }
 
   var floored = Math.round((result.toString()) * 100) / 100;
   doc.showMessage(status + " - " + floored + ":1");
 };
 
-function textColor(artboard, colorSizeSet) {
+function textColor(context, artboard, colorRules) {
+  var doc = context.document;
   var text = '',
       app = NSApplication.sharedApplication();
 
-      var validArtboard = true;
-      var layers = artboard.children();
-
-      for (var k = 0; k < layers.count(); k++) {
-
-        if(layers.objectAtIndex(k).class() == "MSLayerGroup" && (layers.objectAtIndex(k).isVisible()==0)){
-          var hiddenLayers = layers.objectAtIndex(k).children();
-
-          for(var g = 0; g < hiddenLayers.count(); g++){
-            hiddenLayers.objectAtIndex(g).setIsVisible(false);
-          }
-        }
-
-        if ((layers.objectAtIndex(k).class() == "MSTextLayer") && (layers.objectAtIndex(k).isVisible()!=0)) {
-          var validColor = false;
-
-          // all text properties are here : http://developer.sketchapp.com/reference/api/file/api/Text.js.html#lineNumber48
-          var textColor = layers.objectAtIndex(k).textColor();
-          var myRegexp = /\(r:(.*) g:(.*) b:(.*) a:(.*)\)/g;
-          var colorValues = myRegexp.exec(textColor);
-          var rgbColor = rgbToHex( parseFloat(colorValues[1]), parseFloat(colorValues[2]), parseFloat(colorValues[3]));
-
-          // check color valid or not
-          for (var l = 0; l < colorSizeSet.length; l++) {
-            if (rgbColor === colorSizeSet[l]) {
-              validColor = true;
-              break;
-            }
-          }
-          // check text color
-          if (!validColor) {
-            layers.objectAtIndex(k).style().addStylePartOfType(1);
-            layers.objectAtIndex(k).style().borders().objectAtIndex(0).setThickness(2);
-            layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setRed(1);
-            layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setGreen(0.13);
-            layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setBlue(0.40);
-            text = "wrong text layer";
-          }
-        }
-      }
-
-  if (text == '') {
-    app.displayDialog_withTitle("Well done. 🙌", "No issues found." +"\n" );
-  } else {
-    app.displayDialog_withTitle("Happy fixing. 😇", "The text layers marked in red have wrong text color.");
-  }
-};
-
-function textHeight(artboard, lineHeightSet) {
-  var text = '',
-  app = NSApplication.sharedApplication();
-
   var validArtboard = true;
   var layers = artboard.children();
+  var hsl = []; 
+  var colorSetValue = colorSet(colorRules, hsl, 0);
+  var colorSetValueRgb = colorSetRGB(colorSetValue);
 
   for (var k = 0; k < layers.count(); k++) {
+
     if(layers.objectAtIndex(k).class() == "MSLayerGroup" && (layers.objectAtIndex(k).isVisible()==0)){
       var hiddenLayers = layers.objectAtIndex(k).children();
+
       for(var g = 0; g < hiddenLayers.count(); g++){
         hiddenLayers.objectAtIndex(g).setIsVisible(false);
       }
     }
 
     if ((layers.objectAtIndex(k).class() == "MSTextLayer") && (layers.objectAtIndex(k).isVisible()!=0)) {
-      var validLineHeight = false;
+      var validColor = false;
 
-      // all text properties are here : http://developer.sketchapp.com/reference/api/file/api/Text.js.html#lineNumber4
-      for (var l = 0; l < lineHeightSet.length; l++) {
-        if (Math.round(layers.objectAtIndex(k).lineHeight()/layers.objectAtIndex(k).fontSize()*100)/100 === lineHeightSet[l]) {
-          validLineHeight = true;
+      // all text properties are here : http://developer.sketchapp.com/reference/api/file/api/Text.js.html#lineNumber48
+      var textColor = layers.objectAtIndex(k).textColor();
+      var myRegexp = /\(r:(.*) g:(.*) b:(.*) a:(.*)\)/g;
+      var colorValues = myRegexp.exec(textColor);
+
+      // log("colorSetValueRgb:" +colorValues);
+
+      // check color valid or not
+      for (var l = 0; l < colorSetValueRgb.length; l++) {
+        if( Math.round(parseFloat(colorValues[1])*255) == colorSetValueRgb[l][0] && Math.round(parseFloat(colorValues[2])*255) == colorSetValueRgb[l][1] && Math.round(parseFloat(colorValues[3])*255) == colorSetValueRgb[l][2]) {
+          validColor = true;
           break;
         }
       }
-      // check font height
-      if (!validLineHeight) {
+
+      // log("validColor:" + validColor);
+      // check text color
+      if (!validColor) {
         layers.objectAtIndex(k).style().addStylePartOfType(1);
         layers.objectAtIndex(k).style().borders().objectAtIndex(0).setThickness(2);
         layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setRed(1);
         layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setGreen(0.13);
         layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setBlue(0.40);
-        text = "wrong text layer";      
+        text = "wrong text layer";
       }
     }
   }
 
   if (text == '') {
-    app.displayDialog_withTitle("Well done. 🙌", "No issues found." +"\n" );
+    doc.showMessage("Well done 😎, no issues found.");
   } else {
-    app.displayDialog_withTitle("Happy fixing. 😇", "The text layers marked in red have wrong line height.");
+    doc.showMessage("The layers marked in red have wrong fill colors, in yellow have wrong border colors. Happy fixing 😊");
   }
 };
-
-
 
 // ENTIRE FILE AT ONCE. DISCUSS IF THESE MAKE SENSE
 function check_ForFontSizeAll(context, fontSizeSet) {
