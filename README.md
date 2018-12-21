@@ -2,10 +2,12 @@
 
 Validate your designs against your defined design guidelines, within seconds
 
-# Extract the rules
+
+# Extract the rules 
 To use this plugin, you just need a Sketch file with your design guideline. This is file which contains text styles and colors swatches defined. The plugin can extract all the typography cases and color rules from the guideline with a single click and store it as a JSON. This JSON is what is going to power the plugin in the next stages. 
 
 ![alt text](https://github.com/saranshsolanki/sketch-lint/blob/master/police2.gif)
+
 
 # Check for errors
 This plugin works exactly like how a lint for code works. With the rules mentioned, it would analyze your designs for any potential errors.
@@ -29,12 +31,14 @@ This helps you get the accessibility score of the text layers based on readabili
 ### Padding
 Check for vertical padding between layers and shapes.
 
+
 # Fixing the errors
 Now that the designers know the errors in their designs, the plugin can assist in fixing them. The plugin can suggest you with possible fixes. The logic behind is a complex set of fuzzy logic which helps estimates the nearest possible rules to the problematic layer. 
 
 This is still in progess, and the following video demonstrates the bare minimum of what the plugin can achieve.
 
 ![alt text](https://github.com/saranshsolanki/sketch-lint/blob/master/police4.gif)
+
 
 # Need for this plugin
 Well, I love design systems. They are extremely essential in today's world to build faster, better, robust and consistent products. Having such rules gives designers space and opportunity to focus on vital components which define the usability of their products. 
