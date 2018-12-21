@@ -2,7 +2,7 @@
 
 Validate your designs against your defined design guidelines, within seconds
 
-![alt text](https://github.com/saranshsolanki/sketch-lint/blob/master/lint.gif?raw=true)
+![alt text](https://github.com/saranshsolanki/sketch-lint/blob/master/police2.gif.gif?raw=true)
 
 # Need for this plugin
 Well, I love design systems. They are extremely essential in today's world to build faster, better, robust and consistent products. Having such rules gives designers space and opportunity to focus on vital components which define the usability of their products. 
