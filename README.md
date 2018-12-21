@@ -60,3 +60,5 @@ The plugin currently is in a prototype phase. I have been testing the algorithm,
 
 ## Contact
 Saransh : [@SaranshSolanki](https://twitter.com/SaranshSolanki)
+
+MIT © [@saranshsolanki](https://github.com/saranshsolanki/)
