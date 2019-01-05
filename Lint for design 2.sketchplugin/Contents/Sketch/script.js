@@ -1,11 +1,14 @@
-
 const sketch = require('sketch/dom');
 var appName = 'Text Validator', suffix = 'pt';
 
 
-const IDENTIFIER = "com.policeplugin.sketchlint";
+const IDENTIFIER = "com.bpluginbundle.sketchlint";
 
 const DEFINITION_URLS = {
+  color: 'https://api.myjson.com/bins/1cqluc',
+  // font: 'https://api.myjson.com/bins/pgk38',
+  // font: 'https://api.myjson.com/bins/sndcq',
+  font:'https://api.myjson.com/bins/1gyl5a',
   unit: 'https://api.myjson.com/bins/obu1g'
 };
 
@@ -41,6 +44,687 @@ function setPreferences(key, value) {
     userDefaults.synchronize();
 }
 
+var fontrules = {  
+   "styles":[  
+      {  
+         "name":"22px / Extra Light",
+         "font":"NunitoSans-ExtraLight",
+         "size":22,
+         "fontweight":3,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Light",
+         "font":"NunitoSans-Light",
+         "size":22,
+         "fontweight":3,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Regular ",
+         "font":"NunitoSans-Regular",
+         "size":22,
+         "fontweight":5,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Semi Bold",
+         "font":"NunitoSans-SemiBold",
+         "size":22,
+         "fontweight":8,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Bold",
+         "font":"NunitoSans-Bold",
+         "size":22,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Extra Bold",
+         "font":"NunitoSans-ExtraBold",
+         "size":22,
+         "fontweight":10,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"22px / Black",
+         "font":"NunitoSans-Black",
+         "size":22,
+         "fontweight":11,
+         "color":{  
+            "red":0.007843137254901959,
+            "green":0.1254901960784314,
+            "blue":0.2784313725490196,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H1 ",
+         "font":"NunitoSans-Bold",
+         "size":120,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H2",
+         "font":"NunitoSans-Bold",
+         "size":80,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H3",
+         "font":"Montserrat-SemiBold",
+         "size":60,
+         "fontweight":8,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H4",
+         "font":"NunitoSans-Bold",
+         "size":40,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Heading / H5",
+         "font":"NunitoSans-Bold",
+         "size":30,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/black",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/regular/black ",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/regular/white",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/Regular/Grey 400",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.6,
+            "green":0.6,
+            "blue":0.6,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Grey",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.6,
+            "green":0.6,
+            "blue":0.6,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/White",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Green",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2980392156862745,
+            "green":0.8862745098039215,
+            "blue":0.6549019607843137,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Red",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.8862745098039215,
+            "green":0.2980392156862745,
+            "blue":0.2980392156862745,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Orange",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.9450980392156862,
+            "green":0.6313725490196078,
+            "blue":0.3254901960784314,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/regular/Orange",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.9450980392156862,
+            "green":0.6313725490196078,
+            "blue":0.3254901960784314,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/Regular/Green",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.2980392156862745,
+            "green":0.8862745098039215,
+            "blue":0.6549019607843137,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Body Text / grey ",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px / Placeholder text",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.6,
+            "green":0.6,
+            "blue":0.6,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Input Text / Black",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Error text",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":1,
+            "green":0.4196078431372549,
+            "blue":0.4196078431372549,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / success text",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.2980392156862745,
+            "green":0.8862745098039215,
+            "blue":0.6549019607843137,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.007843137254901959,
+            "green":0.1254901960784314,
+            "blue":0.2784313725490196,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label / Red",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.8862745098039215,
+            "green":0.2980392156862745,
+            "blue":0.2980392156862745,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Warning text ",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.9450980392156862,
+            "green":0.6313725490196078,
+            "blue":0.3254901960784314,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"Paragraph text/Dark",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":24
+      },
+      {  
+         "name":"14px / Label / Blue",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.1764705882352941,
+            "green":0.3058823529411765,
+            "blue":0.9607843137254902,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Label / Lighter",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"22px / Bold / White ",
+         "font":"NunitoSans-Bold",
+         "size":22,
+         "fontweight":9,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"Body Text / Black",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px/bold/Blue",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.1764705882352941,
+            "green":0.3058823529411765,
+            "blue":0.9607843137254902,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px / Input Text / Grey",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.6,
+            "green":0.6,
+            "blue":0.6,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Input Text / White",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"Body Text / White",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px / Label / White",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":1,
+            "green":1,
+            "blue":1,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"14px / Input Text ",
+         "font":"NunitoSans-Regular",
+         "size":14,
+         "fontweight":5,
+         "color":{  
+            "red":0.007843137254901959,
+            "green":0.1254901960784314,
+            "blue":0.2784313725490196,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"Heading/H6",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":21
+      },
+      {  
+         "name":"Heading/H5",
+         "font":"NunitoSans-Bold",
+         "size":18,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":27
+      },
+      {  
+         "name":"Heading/H4",
+         "font":"NunitoSans-Bold",
+         "size":22,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":33
+      },
+      {  
+         "name":"Heading/H3",
+         "font":"NunitoSans-Bold",
+         "size":26,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":39
+      },
+      {  
+         "name":"Heading/H2",
+         "font":"NunitoSans-Bold",
+         "size":30,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":45
+      },
+      {  
+         "name":"Heading/H1",
+         "font":"NunitoSans-Bold",
+         "size":34,
+         "fontweight":9,
+         "color":{  
+            "red":0.2,
+            "green":0.2,
+            "blue":0.2,
+            "alpha":1
+         },
+         "lineHeight":51
+      },
+      {  
+         "name":"Body Text / Blue",
+         "font":"NunitoSans-Regular",
+         "size":16,
+         "fontweight":5,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":0
+      },
+      {  
+         "name":"14px / Label / White",
+         "font":"NunitoSans-Bold",
+         "size":14,
+         "fontweight":9,
+         "color":{  
+            "red":0.4,
+            "green":0.4,
+            "blue":0.4,
+            "alpha":1
+         },
+         "lineHeight":21
+      }
+   ]
+};
+
 
 // MAIN FUNCTIONS
 
@@ -61,7 +745,7 @@ function checkColor(context) {
   var contextnew = context.selection.objectAtIndex(0);
   var artboardType = checkArtboard(context);
   color(context, contextnew, colorRules);
-  // checkTextColor(context, colorRules);
+  checkTextColor(context, colorRules);
 };
 
 // to check for spelling
@@ -114,44 +798,6 @@ function checkContrast (context){
     displayConstrast(doc, textLayer, result);
   }
 };
-
-function loadJSON(){
-  var openPanel = NSOpenPanel.openPanel();
-    openPanel.setTitle( "Select a JSON file for the text styles" ); 
-    openPanel.setCanCreateDirectories = false; 
-    openPanel.setCanChooseFiles = true; 
-
-  var fileTypes = ['json']; 
-  var openPanelButtonPressed = openPanel.runModalForDirectory_file_types_( nil, nil, fileTypes );
-
-  if ( openPanelButtonPressed == NSFileHandlingPanelOKButton ) {
-    var filePath = openPanel.URL().path();
-    var selectedJson = JSON.parse( NSString.stringWithContentsOfFile( filePath ) );
-    setPreferences("font", selectedJson);
-  } else {
-    return false;
-  }
-}
-
-
-function loadColorJSON(){
-  var openPanel = NSOpenPanel.openPanel();
-    openPanel.setTitle( "Select a JSON file for the text styles" ); 
-    openPanel.setCanCreateDirectories = false; 
-    openPanel.setCanChooseFiles = true; 
-
-  var fileTypes = ['json']; 
-  var openPanelButtonPressed = openPanel.runModalForDirectory_file_types_( nil, nil, fileTypes );
-
-  if ( openPanelButtonPressed == NSFileHandlingPanelOKButton ) {
-    var filePath = openPanel.URL().path();
-    var selectedJson = JSON.parse( NSString.stringWithContentsOfFile( filePath ) );
-    setPreferences("color", selectedJson);
-  } else {
-    return false;
-  }
-}
-
 
 function checkFont(context){
   updateDefinitions();
@@ -428,6 +1074,7 @@ function editDistance(s1, s2) {
   return costs[s2.length];
 }
 
+
 function deltaE(rgbA, rgbB) {
   let labA = rgb2lab(rgbA);
   let labB = rgb2lab(rgbB);
@@ -677,7 +1324,7 @@ function typography(context, artboard, artboardType){
           var matchScore = calculateMatchScore(fontSize, fontFamily, lineHeight, fontWeight, textColor, ruleItem, maxFontSize, maxLineHeight, maxFontWeight);
           matchScore.ruleNumber = l;
           var fontnameMatchScore = {ruleNumber : l, totalscore: (matchScore.colorMatchScore + matchScore.fontnameMatchScore + matchScore.fontsizeMatchScore + matchScore.fontweightMatchScore + matchScore.lineheightMatchScore)}; 
-          matchScore.totalscore = (matchScore.colorMatchScore*2 + matchScore.fontnameMatchScore*4 + matchScore.fontsizeMatchScore*5 + matchScore.fontweightMatchScore*3 + matchScore.lineheightMatchScore*1)/15;
+          matchScore.totalscore = (matchScore.colorMatchScore + matchScore.fontnameMatchScore + matchScore.fontsizeMatchScore + matchScore.fontweightMatchScore + matchScore.lineheightMatchScore);
           
           // log("matchScore");
           // log(matchScore);
@@ -902,12 +1549,11 @@ function rgbToHex(r, g, b) {
 
 var hexToRGB = function(hex, alpha) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex),
-        red = parseInt(result[1], 16),
-        green = parseInt(result[2], 16) ,
-        blue = parseInt(result[3], 16),
+        red = parseInt(result[1], 16) / 255,
+        green = parseInt(result[2], 16) / 255,
+        blue = parseInt(result[3], 16) / 255,
         alpha = (typeof alpha !== 'undefined') ? alpha : 1;
-    // return NSColor.colorWithCalibratedRed_green_blue_alpha(red, green, blue, alpha)
-    return [Math.round(red ), Math.round(green), Math.round(blue)];
+    return NSColor.colorWithCalibratedRed_green_blue_alpha(red, green, blue, alpha)
 };
 
 function hslToRgb(h, s, l){
@@ -945,37 +1591,25 @@ function colorSetRGB(colorSetValue){
   return(colorSetValueRgb);
 }
 
-// function colorSet(colorRules, hsl, a) {
+function colorSet(colorRules, hsl, a) {
 
-//   var keys = Object.keys(colorRules);
-//   for(var i =0; i<keys.length; i++){
-//     key = keys[i];
-
-//     if(key == "hsl"){
-//       var hslLength = hsl.length;
-//       hsl[hslLength] = colorRules[key];
-//     }
-
-//     if ( (Object.keys(colorRules[key])).length > 0){
-//       colorSet(colorRules[key], hsl, a);
-//     }
-//   }
-//   return(hsl);
-// }
-
-function colorSet(colorRules){
   var keys = Object.keys(colorRules);
-  var colorSetValueRgb = [];
-
   for(var i =0; i<keys.length; i++){
     key = keys[i];
-    var colorSetValueHex = colorRules[i].value;
-    var colorSetValueHex = colorSetValueHex.replace('#', '');
-    colorSetValueRgb[i] = hexToRGB(colorSetValueHex);
 
+    if(key == "hsl"){
+      var hslLength = hsl.length;
+      hsl[hslLength] = colorRules[key];
+      // a++;
+      // log("here");
+      // log("a:" + a);
+    }
+
+    if ( (Object.keys(colorRules[key])).length > 0){
+      colorSet(colorRules[key], hsl, a);
+    }
   }
-  return(colorSetValueRgb);
-  // log(keys);
+  return(hsl);
 }
 
 function color(context, artboard, colorRules){
@@ -987,11 +1621,9 @@ function color(context, artboard, colorRules){
   var layers = artboard.children();
   var hsl = []; 
 
-  // var colorSetValue = colorSet(colorRules, hsl, 0);
+  var colorSetValue = colorSet(colorRules, hsl, 0);
 
-  // var colorSetValueRgb = colorSetRGB(colorSetValue);
-
-  var colorSetValueRgb = colorSet(colorRules);
+  var colorSetValueRgb = colorSetRGB(colorSetValue);
 
   for (var k = 0; k < layers.count(); k++) {
 
@@ -1002,9 +1634,8 @@ function color(context, artboard, colorRules){
       }
     }
     var layerObject = layers.objectAtIndex(k);
-    
 
-    if ( ((layerObject.class() == "MSShapeGroup") || (layerObject.class() == "MSRectangleShape")) && (layerObject.isVisible)){
+    if ((layerObject.class() == "MSShapeGroup") && (layerObject.isVisible)){
       
       // check if the layer is visually visible
 
@@ -1028,18 +1659,20 @@ function color(context, artboard, colorRules){
       }
     }
 
-    if (((layerObject.class() == "MSShapeGroup") || (layerObject.class() == "MSRectangleShape")) && (layerObject.isVisible()!=0) && (visibleFill > 0))  {
+    if ((layerObject.class() == "MSShapeGroup") && (layerObject.isVisible()!=0) && (visibleFill > 0))  {
       var validColor = false;
 
       // all text properties are here : http://developer.sketchapp.com/reference/api/file/api/Text.js.html#lineNumber48
       var layerColor = layerObject.style().fills().objectAtIndex(0).color();
       var myRegexp = /\(r:(.*) g:(.*) b:(.*) a:(.*)\)/g;
       var colorValues = myRegexp.exec(layerColor);
-      
       // log("colorValues:" + colorValues);
       // log("here" +"1:" + Math.round(parseFloat(colorValues[1])*255) + "2:" + Math.round(parseFloat(colorValues[2])*255) + "3:" + Math.round(parseFloat(colorValues[3])*255) )
 
+
+
       for (var l = 0; l < colorSetValueRgb.length; l++) {
+        // log("1:" + colorSetValueRgb[l][0] + "2:" + colorSetValueRgb[l][1] + "3:" + colorSetValueRgb[l][2] )
         if( Math.round(parseFloat(colorValues[1])*255) == colorSetValueRgb[l][0] && Math.round(parseFloat(colorValues[2])*255) == colorSetValueRgb[l][1] && Math.round(parseFloat(colorValues[3])*255) == colorSetValueRgb[l][2]) {
           validColor = true;
           break;
@@ -1057,7 +1690,7 @@ function color(context, artboard, colorRules){
       }
     }
 
-    if (((layerObject.class() == "MSShapeGroup") || (layerObject.class() == "MSRectangleShape")) && (layerObject.isVisible()!=0) && (visibleBorder > 0)){
+    if ((layerObject.class() == "MSShapeGroup") && (layerObject.isVisible()!=0) && (visibleBorder > 0)){
       var borderColor = layerObject.style().borders().objectAtIndex(0).color();
       var validColor = false;
       var layerObject = layers.objectAtIndex(k);

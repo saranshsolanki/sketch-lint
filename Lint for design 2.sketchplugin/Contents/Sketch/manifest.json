@@ -40,28 +40,16 @@
       "identifier" : "padding"
     },
     {
-      "script" : "export-text.cocoascript",
+      "script" : "script.js",
+      "handler" : "updateDefinitions",
+      "name" : "Update Rules",
+      "identifier" : "update"
+    },
+    {
+      "script" : "export.cocoascript",
       "handler" : "exportFonts",
       "name" : "Export Text Styles",
       "identifier" : "exportFonts"
-    },
-    {
-      "script" : "export-color.js",
-      "handler" : "exportColor",
-      "name" : "Export Color Styles",
-      "identifier" : "exportColor"
-    },
-    {
-      "script" : "script.js",
-      "handler" : "loadJSON",
-      "name" : "Import Text Styles",
-      "identifier" : "loadJson"
-    },
-    {
-      "script" : "script.js",
-      "handler" : "loadColorJSON",
-      "name" : "Import Color Styles",
-      "identifier" : "loadColorJson"
     }
   ],
   "menu" : {
@@ -73,10 +61,8 @@
       "padding",
       "-",
       "exportFonts",
-      "exportColor",
       "-",
-      "loadJson",
-      "loadColorJson"
+      "update"
     ],
     "title" : "Police"
   },
