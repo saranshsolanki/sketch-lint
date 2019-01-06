@@ -945,23 +945,23 @@ function colorSetRGB(colorSetValue){
   return(colorSetValueRgb);
 }
 
-// function colorSet(colorRules, hsl, a) {
+function colorSetOld(colorRules, hsl, a) {
 
-//   var keys = Object.keys(colorRules);
-//   for(var i =0; i<keys.length; i++){
-//     key = keys[i];
+  var keys = Object.keys(colorRules);
+  for(var i =0; i<keys.length; i++){
+    key = keys[i];
 
-//     if(key == "hsl"){
-//       var hslLength = hsl.length;
-//       hsl[hslLength] = colorRules[key];
-//     }
+    if(key == "hsl"){
+      var hslLength = hsl.length;
+      hsl[hslLength] = colorRules[key];
+    }
 
-//     if ( (Object.keys(colorRules[key])).length > 0){
-//       colorSet(colorRules[key], hsl, a);
-//     }
-//   }
-//   return(hsl);
-// }
+    if ( (Object.keys(colorRules[key])).length > 0){
+      colorSet(colorRules[key], hsl, a);
+    }
+  }
+  return(hsl);
+}
 
 function colorSet(colorRules){
   var keys = Object.keys(colorRules);
@@ -1047,6 +1047,22 @@ function color(context, artboard, colorRules){
       }
 
       if (!validColor) {
+        var closestColorSimilarity = 100;
+        var closestColorIndex;
+        // fixing colors
+        for(m=0; m<colorSetValueRgb.length; m++){
+          var colorSimilarity = deltaE([Math.round(parseFloat(colorValues[1])*255), Math.round(parseFloat(colorValues[2])*255), Math.round(parseFloat(colorValues[3])*255)],[colorSetValueRgb[m][0], colorSetValueRgb[m][1],colorSetValueRgb[m][2]]);
+          if (colorSimilarity < closestColorSimilarity){
+            closestColorSimilarity = colorSimilarity;
+            closestColorIndex = m;
+          }
+        }
+
+        // var fillCount = layers.objectAtIndex(k).style().fills().count();        
+        layers.objectAtIndex(k).style().fills().objectAtIndex(0).color().setRed(colorSetValueRgb[closestColorIndex][0]/255);
+        layers.objectAtIndex(k).style().fills().objectAtIndex(0).color().setGreen(colorSetValueRgb[closestColorIndex][1]/255);
+        layers.objectAtIndex(k).style().fills().objectAtIndex(0).color().setBlue(colorSetValueRgb[closestColorIndex][2]/255);      
+
         var borderCount = layers.objectAtIndex(k).style().borders().count();
         layers.objectAtIndex(k).style().addStylePartOfType(1);
         layers.objectAtIndex(k).style().borders().objectAtIndex(borderCount).setThickness(4);
@@ -1076,6 +1092,22 @@ function color(context, artboard, colorRules){
       }
 
       if (!validColor) {
+
+        var closestColorSimilarity = 100;
+        var closestColorIndex;
+        // fixing colors
+        for(m=0; m<colorSetValueRgb.length; m++){
+          var colorSimilarity = deltaE([Math.round(parseFloat(colorValues[1])*255), Math.round(parseFloat(colorValues[2])*255), Math.round(parseFloat(colorValues[3])*255)],[colorSetValueRgb[m][0], colorSetValueRgb[m][1],colorSetValueRgb[m][2]]);
+          if (colorSimilarity < closestColorSimilarity){
+            closestColorSimilarity = colorSimilarity;
+            closestColorIndex = m;
+          }
+        }
+
+        layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setRed(colorSetValueRgb[closestColorIndex][0]/255);
+        layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setGreen(colorSetValueRgb[closestColorIndex][1]/255);
+        layers.objectAtIndex(k).style().borders().objectAtIndex(0).color().setBlue(colorSetValueRgb[closestColorIndex][2]/255); 
+
         var borderCount = layers.objectAtIndex(k).style().borders().count();
         layers.objectAtIndex(k).style().addStylePartOfType(1);
         layers.objectAtIndex(k).style().borders().objectAtIndex(borderCount).setThickness(2);
@@ -1084,7 +1116,6 @@ function color(context, artboard, colorRules){
         layers.objectAtIndex(k).style().borders().objectAtIndex(borderCount).color().setBlue(0.30);
         text += " color: " + '  \"' + layers.objectAtIndex(k).name() + '\"  ' + rgbColor + '\n';
       }
-
     }
   }
 
@@ -1092,7 +1123,7 @@ function color(context, artboard, colorRules){
     doc.showMessage("Well done 😎, no issues found.");
   } else {
     // doc.showMessage("The marked areas have padding issues. Happy fixing 😊");
-    doc.showMessage("The layers marked in red have wrong fill colors, in yellow have wrong border colors. Happy fixing 😊");
+    doc.showMessage("The layers marked in red have wrong fill colors, in yellow have wrong border colors. They have been fixed for you 😊");
   }
 };
 
