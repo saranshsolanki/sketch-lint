@@ -78,7 +78,7 @@ function checkContrast (context){
   var app = NSApplication.sharedApplication();
 
   if (selection.count() == 0){
-    app.displayDialog_withTitle("Please select one or two layers.", "Color Contrast Analyser");
+    doc.showMessage("Please select one or two layers to test the contrast.");
   }
 
   if (selection.count() == 1){
