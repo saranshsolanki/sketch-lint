@@ -1,4 +1,4 @@
-# Sketch Police
+# Lint for Sketch
 
 Validate your designs against your defined design guidelines, within seconds
 
