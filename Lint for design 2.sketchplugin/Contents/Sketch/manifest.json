@@ -22,7 +22,7 @@
       "identifier" : "color"
     },
     {
-      "script" : "script.js",
+      "script" : "script_spelling.js",
       "handler" : "checkSpelling",
       "name" : "Spelling",
       "identifier" : "spelling"

@@ -1,0 +1,18 @@
+styles.push({
+                    name: name,
+                    font: family,
+                    size: size,
+                    color: {
+                        red: red,
+                        green: green,
+                        blue: blue,
+                        alpha: alpha
+                    },
+                    alignment: align,
+                    spacing: spacing,
+                    lineHeight: lineHeight,
+                    paragraphSpacing: paragraphSpacing,
+                    textTransform: textTransform,
+                    strikethrough: strike,
+                    underline: underline
+                });
