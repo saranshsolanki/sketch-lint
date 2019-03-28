@@ -35,7 +35,7 @@ Check for vertical padding between layers and shapes.
 # Fixing the errors
 Now that the designers know the errors in their designs, the plugin can assist in fixing them. The plugin can suggest you with possible fixes. The logic behind is a complex set of fuzzy logic which helps estimates the nearest possible rules to the problematic layer. 
 
-This is still in progess, and the following video demonstrates the bare minimum of what the plugin can achieve.
+This is still in progress, and the following video demonstrates the bare minimum of what the plugin can achieve.
 
 ![alt text](https://github.com/saranshsolanki/sketch-lint/blob/master/police4.gif)
 
