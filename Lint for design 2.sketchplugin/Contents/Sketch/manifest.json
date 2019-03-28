@@ -78,9 +78,9 @@
       "loadJson",
       "loadColorJson"
     ],
-    "title" : "Police"
+    "title" : "Sketch Lint"
   },
-  "version": "1.0",
+  "version": "2.0",
   "description": "Lint for your design guidelines.",
   "authorEmail": "saransh.solanki@gmail.com",
 }
